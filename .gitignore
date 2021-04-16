@@ -1,4 +1,4 @@
 .vscode/
-.mp4
-.asv
+*.mp4
+*.asv
 feature/
