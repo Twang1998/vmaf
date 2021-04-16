@@ -1,6 +1,6 @@
 clear all;
-result = [];
-result2 = [];
+% result = [];
+% result2 = [];
 
 %scio.savemat('Train_data.mat', {'train_ref':df['file_ref'] , 'train_dis':df['file_dis']})
 %scio.savemat('Train_dmos.mat', {'train_dmos':df['dmos'] })
@@ -16,15 +16,15 @@ load (fullfile('data','Test_dmos.mat'));
 Train_path = '';
 Test_path = '';
 
-addpath(AVMAF)
+addpath('AVMAF')
 
 for i = 1:length(train_ref)
-    ref_img_path = train_ref[i](1:end-4);
-    dis_img_path = train_dis[i](1:end-4);
+    ref_img_path = train_ref(i,1:end-4);
+    dis_img_path = train_dis(i,1:end-4);
     for j = 1:10
-        pic = num2str(j,%03d);
-        ref_img = fullfile(Train_path,ref_img_path,pic);
-        dis_img = fullfile(Train_path,dis_img_path,pic);
+        pic = num2str(j-1,'%03d');
+        ref_img = fullfile(Train_path,ref_img_path,strcat(pic,'.png'));
+        dis_img = fullfile(Train_path,dis_img_path,strcat(pic,'.png'));
         ref = (rgb2gray(imread(ref_img)));
         dis = (rgb2gray(imread(dis_img)));
         vifp_feat(j,:)=VIFP_feat(ref,dis);
@@ -36,7 +36,7 @@ for i = 1:length(test_ref)
     ref_img_path = test_ref(i,1:end-4);
     dis_img_path = test_dis(i,1:end-4);
     for j = 1:10
-        pic = num2str(j,%03d);
+        pic = num2str(j-1,'%03d');
         ref_img = fullfile(Test_path,ref_img_path,strcat(pic,'.png'));
         dis_img = fullfile(Test_path,dis_img_path,strcat(pic,'.png'));
         ref = (rgb2gray(imread(ref_img)));

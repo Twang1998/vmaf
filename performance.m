@@ -66,6 +66,7 @@ PLCC = corr(LabelTest, Score, 'type','Pearson');
 KROCC = corr(LabelTest, Score, 'type','Kendall');
 RMSE = sqrt(mean((LabelTest-Score).^2));
 
+result = [SROCC, PLCC, KROCC, RMSE]
 
 %n_epoch = 1;
 %load similar.mat;
