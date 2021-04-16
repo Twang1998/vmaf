@@ -46,8 +46,8 @@ for i = 1:length(test_ref)
     vifp_feat_test(i,:) = mean(vifp_feat,1);
 end
 
-save(fullfile(feature,'train_feature.mat'), 'vifp_feat_train')
-save(fullfile(feature,'test_feature.mat'), 'vifp_feat_test')
+save(fullfile('feature','train_feature.mat'), 'vifp_feat_train')
+save(fullfile('feature','test_feature.mat'), 'vifp_feat_test')
 
 
 
