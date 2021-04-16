@@ -16,3 +16,5 @@ the vmaf on UGC
 3. 运行 performance.m
 
    result是最终预测结果的指标。
+   
+   ![1](Figure/1.jpg)
