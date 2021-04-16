@@ -15,7 +15,7 @@ load (fullfile('data','Test_dmos.mat'));
 
 %Train_path = '';
 %Test_path = '';
-video_path = '';
+video_path = '';  %all video path
 
 % train_ref = ['UGC0499_1280x720_30_crf_27.mp4'];
 % train_dis = ['UGC0499_1280x720_30_crf_27.mp4'];
@@ -26,7 +26,7 @@ for i = 1:length(train_ref)
     dis_video = train_dis(i,:);
     ref_obj = VideoReader(fullfile(video_path,ref_video));
     dis_obj = VideoReader(fullfile(video_path,dis_video));
-    for j = 1:1:ref_obj.NumberOfFrames
+    for j = 1:1:ref_obj.NumberOfFrames  %change the step to set the num of frames selected
         ref_img = read(ref_obj, j);
         ref_img = rgb2gray(ref_img);
         dis_img = read(dis_obj, j);
@@ -41,7 +41,7 @@ for i = 1:length(test_ref)
     dis_video = test_dis(i,:);
     ref_obj = VideoReader(fullfile(video_path,ref_video));
     dis_obj = VideoReader(fullfile(video_path,dis_video));
-    for j = 1:1:ref_obj.NumberOfFrames
+    for j = 1:1:ref_obj.NumberOfFrames   %change the step to set the num of frames selected
         ref_img = read(ref_obj, j);
         ref_img = rgb2gray(ref_img);
         dis_img = read(dis_obj, j);
