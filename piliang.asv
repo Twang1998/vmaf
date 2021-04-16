@@ -33,12 +33,12 @@ for i = 1:length(train_ref)
 end
 
 for i = 1:length(test_ref)
-    ref_img_path = test_ref(i,1:end-4);
-    dis_img_path = test_dis(i,1:end-4);
+    ref_img_path = test_ref[i](1:end-4);
+    dis_img_path = test_dis[i](1:end-4);
     for j = 1:10
         pic = num2str(j,%03d);
-        ref_img = fullfile(Test_path,ref_img_path,strcat(pic,'.png'));
-        dis_img = fullfile(Test_path,dis_img_path,strcat(pic,'.png'));
+        ref_img = fullfile(Test_path,ref_img_path,pic);
+        dis_img = fullfile(Test_path,dis_img_path,pic);
         ref = (rgb2gray(imread(ref_img)));
         dis = (rgb2gray(imread(dis_img)));
         vifp_feat(j,:)=VIFP_feat(ref,dis);

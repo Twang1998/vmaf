@@ -3,44 +3,23 @@ dbstop if error         % for debugging: trigger a debug point when an error
 %rng('default');
 %curdir = cd;
 %addpath('C:\Users\Orange\Desktop\LowLightEnhancementTest1\Enhancement\compare\')
-type = 'region';
-nr = 'NIQE';
 
-load(strcat('E:\taowang\NR\',nr,'\train_',type,'_feature.mat'));
-FeatureTrain = result;
-FeatureTrain(isnan(FeatureTrain)==1) = 0
-load(strcat('E:\taowang\NR\',nr,'\test_',type,'_feature.mat'));
-FeatureTest = result2;
-FeatureTest(isnan(FeatureTest)==1) = 0
-load(strcat('train_',type,'.mat'));
-load(strcat('test_',type,'.mat'));
-if type == 'region' 
-    LableTrain = train_region_score;
-    LableTest = test_region_score;
-else
-    LableTrain = train_global_score;
-    LableTest = test_global_score;
-end
+% save(fullfile(feature,'train_feature.mat'), 'vifp_feat_train')
+% save(fullfile(feature,'test_feature.mat'), 'vifp_feat_test')
 
-svmdir = 'E:\taowang\RESVM\SVM\SVM';
+load(fullfile('feature','train_feature.mat'));
+load(fullfile('feature','test_feature.mat'));
+load(fullfile('data','Train_dmos.mat'));
+load(fullfile('data','Test_dmos.mat'));
+FeatureTrain = vifp_feat_train;
+LabelTrain = train_dmos;
+FeatureTest = vifp_feat_test;
+LabelTest = test_dmos;
+
+CurrentPath = pwd;
+svmdir = 'AVMAF\SVM';
 cd(svmdir);
-%n_epoch = 1;
-%load similar.mat;
 
-%result_feature = [result(:,1:39)];
-%
-%result_feature = [result(:,1:2) result(:,24) result(:,27)  result(:,34:39) result(:,40:41) result(:,46) result(:,47)];
-%load result.mat;
-%result_feature = [result(:,1:2) result(:,15:20) result(:,36:39) result(:,21:22) result(:,26) result(:,27:29)];
-
-
-% load train and testing features
-%load([database_name,'_train_',num2str(i-1),'_',feature_name,'.mat'])
-%load([database_name,'_test_',num2str(i-1),'_',feature_name,'.mat'])
-
-% load train and testing score
-%load(['F:\OneDrive\Code\AuthenticIQA\database_file_ten\',database_name,'_train_',num2str(i-1),'.mat']);
-%load(['F:\OneDrive\Code\AuthenticIQA\database_file_ten\',database_name,'_test_',num2str(i-1),'.mat']);
 
 % train the model using SVR
 %eval(['FeatureTrain = ',database_name,'_train_',num2str(i-1),'_',feature_name,';'])
@@ -79,43 +58,34 @@ delete test_ind_scaled
 system('svm-scale -r range test_ind.txt >> test_ind_scaled');
 system('svm-predict  -b 1  test_ind_scaled model output.txt>dump');
 load output.txt;
+cd(CurrentPath);
 Score = output;
 
-all_srcc=[];
-all_plcc = [];
-for i = 1:20
-    gt_scores = LableTest((i-1)*15+1:i*15);
-    pred_scores = Score((i-1)*15+1:i*15);
-
-    SRCC = corr(pred_scores,gt_scores,'type','Spearman');
-    PLCC = corr(gt_scores,pred_scores, 'type','Pearson');
+SROCC = corr(LabelTest, Score,'type','Spearman');
+PLCC = corr(LabelTest, Score, 'type','Pearson');
+KROCC = corr(LabelTest, Score, 'type','Kendall');
+RMSE = sqrt(mean((LabelTest-Score).^2));
 
 
-    all_srcc = [all_srcc,SRCC];
-    all_plcc = [all_plcc,PLCC];
-end
+%n_epoch = 1;
+%load similar.mat;
+
+%result_feature = [result(:,1:39)];
+%
+%result_feature = [result(:,1:2) result(:,24) result(:,27)  result(:,34:39) result(:,40:41) result(:,46) result(:,47)];
+%load result.mat;
+%result_feature = [result(:,1:2) result(:,15:20) result(:,36:39) result(:,21:22) result(:,26) result(:,27:29)];
 
 
+% load train and testing features
+%load([database_name,'_train_',num2str(i-1),'_',feature_name,'.mat'])
+%load([database_name,'_test_',num2str(i-1),'_',feature_name,'.mat'])
 
-%cd(curdir)
+% load train and testing score
+%load(['F:\OneDrive\Code\AuthenticIQA\database_file_ten\',database_name,'_train_',num2str(i-1),'.mat']);
+%load(['F:\OneDrive\Code\AuthenticIQA\database_file_ten\',database_name,'_test_',num2str(i-1),'.mat']);
+
+% train the model using SVR
+%eval(['FeatureTrain = ',database_name,'_train_',num2str(i-1),'_',feature_name,';'])
 
 
-acc = [];
-for i =1:20
-    gt_scores = LableTest((i-1)*15+1:i*15);
-    pred_scores = Score((i-1)*15+1:i*15);
-    total = 0;
-    num = 0;
-    for j=1:14
-        for k=j+1:15
-            total =total+1;
-            if(gt_scores(j) >= gt_scores(k) && pred_scores(j) >= pred_scores(k)) || (gt_scores(j) < gt_scores(k) && pred_scores(j) < pred_scores(k))
-                num =num+ 1;
-            end
-        end
-    end
-    single_acc = num/total;
-    acc=[acc,single_acc];
-end
-mean_acc = mean(acc);
-aaaaa = [mean(all_srcc),mean(all_plcc),mean_acc];
