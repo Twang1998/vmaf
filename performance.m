@@ -12,8 +12,10 @@ load(fullfile('feature','test_feature.mat'));
 load(fullfile('data','Train_dmos.mat'));
 load(fullfile('data','Test_dmos.mat'));
 FeatureTrain = vifp_feat_train;
+FeatureTrain(isnan(FeatureTrain)) = 1;
 LabelTrain = train_dmos;
 FeatureTest = vifp_feat_test;
+FeatureTest(isnan(FeatureTest)) = 1;
 LabelTest = test_dmos;
 
 CurrentPath = pwd;
@@ -27,7 +29,7 @@ cd(svmdir);
 
 fid = fopen('train_ind.txt','w');
 for itr_im = 1:size(FeatureTrain,1)
-    fprintf(fid,'%d ',LableTrain(itr_im));
+    fprintf(fid,'%d ',LabelTrain(itr_im));
     for itr_param = 1:size(FeatureTrain,2)
         fprintf(fid,'%d:%f ',itr_param,FeatureTrain(itr_im,itr_param));
     end
