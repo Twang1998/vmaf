@@ -17,33 +17,35 @@ load (fullfile('data','Test_dmos.mat'));
 %Test_path = '';
 video_path = '';
 
+% train_ref = ['UGC0499_1280x720_30_crf_27.mp4'];
+% train_dis = ['UGC0499_1280x720_30_crf_27.mp4'];
 addpath('AVMAF')
 
-for i = 1:length(train_ref):
-    ref_video = train_ref(i,:)
-    dis_video = train_dis(i,:)
-    ref_obj = VideoReader(fullfile(video_path,ref_video))
-    dis_obj = VideoReader(fullfile(video_path,dis_video))
-    for j = 1:ref_obj.NumberOfFrames
-        ref_img = read(ref_obj, j)
-        ref_img = rgb2gray(ref_img)
-        dis_img = read(dis_obj, j)
-        dis_img = rgb2gray(dis_img)
-        vifp_feat(j,:)=VIFP_feat(ref,dis);
+for i = 1:length(train_ref)
+    ref_video = train_ref(i,:);
+    dis_video = train_dis(i,:);
+    ref_obj = VideoReader(fullfile(video_path,ref_video));
+    dis_obj = VideoReader(fullfile(video_path,dis_video));
+    for j = 1:1:ref_obj.NumberOfFrames
+        ref_img = read(ref_obj, j);
+        ref_img = rgb2gray(ref_img);
+        dis_img = read(dis_obj, j);
+        dis_img = rgb2gray(dis_img);
+        vifp_feat(j,:)=VIFP_feat(ref_img,dis_img);
     end
     vifp_feat_train(i,:) = mean(vifp_feat,1);
 end
 
-for i = 1:length(test_ref):
-    ref_video = test_ref(i,:)
-    dis_video = test_dis(i,:)
-    ref_obj = VideoReader(fullfile(video_path,ref_video))
-    dis_obj = VideoReader(fullfile(video_path,dis_video))
-    for j = 1:ref_obj.NumberOfFrames
-        ref_img = read(ref_obj, j)
-        ref_img = rgb2gray(ref_img)
-        dis_img = read(dis_obj, j)
-        dis_img = rgb2gray(dis_img)
+for i = 1:length(test_ref)
+    ref_video = test_ref(i,:);
+    dis_video = test_dis(i,:);
+    ref_obj = VideoReader(fullfile(video_path,ref_video));
+    dis_obj = VideoReader(fullfile(video_path,dis_video));
+    for j = 1:1:ref_obj.NumberOfFrames
+        ref_img = read(ref_obj, j);
+        ref_img = rgb2gray(ref_img);
+        dis_img = read(dis_obj, j);
+        dis_img = rgb2gray(dis_img);
         vifp_feat(j,:)=VIFP_feat(ref,dis);
     end
     vifp_feat_test(i,:) = mean(vifp_feat,1);
