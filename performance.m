@@ -7,14 +7,14 @@ dbstop if error         % for debugging: trigger a debug point when an error
 % save(fullfile(feature,'train_feature.mat'), 'vifp_feat_train')
 % save(fullfile(feature,'test_feature.mat'), 'vifp_feat_test')
 
-load(fullfile('feature','train_feature.mat'));
-load(fullfile('feature','test_feature.mat'));
+load(fullfile('features','ms_ssim_train_feature.mat'));
+load(fullfile('features','ms_ssim_test_feature.mat'));
 load(fullfile('data','Train_dmos.mat'));
 load(fullfile('data','Test_dmos.mat'));
-FeatureTrain = vifp_feat_train;
+FeatureTrain = ms_ssim_train_feature;
 FeatureTrain(isnan(FeatureTrain)) = 1;
 LabelTrain = train_dmos;
-FeatureTest = vifp_feat_test;
+FeatureTest = ms_ssim_test_feature;
 FeatureTest(isnan(FeatureTest)) = 1;
 LabelTest = test_dmos;
 
